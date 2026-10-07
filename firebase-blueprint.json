@@ -1,0 +1,179 @@
+{
+  "entities": {
+    "Task": {
+      "title": "Task",
+      "description": "Background autonomous process executed by agent0",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique task ID",
+          "pattern": "^[a-zA-Z0-9_-]+$",
+          "maxLength": 128
+        },
+        "userId": {
+          "type": "string",
+          "description": "Owner user UID",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "description": "Title or objective of the background process",
+          "maxLength": 200
+        },
+        "type": {
+          "type": "string",
+          "description": "Task domain: computer_use, browser_use, file_editing, github_review, workspace_sync",
+          "enum": ["computer_use", "browser_use", "file_editing", "github_review", "workspace_sync", "general"]
+        },
+        "status": {
+          "type": "string",
+          "description": "Lifecycle state",
+          "enum": ["pending", "running", "completed", "failed", "paused"]
+        },
+        "progress": {
+          "type": "number",
+          "description": "Percentage progress 0 to 100"
+        },
+        "modelUsed": {
+          "type": "string",
+          "description": "Gemini model used for this task execution",
+          "maxLength": 64
+        },
+        "thinkingEnabled": {
+          "type": "boolean",
+          "description": "Whether high-thinking mode was active"
+        },
+        "output": {
+          "type": "string",
+          "description": "Result or summary of the agent execution",
+          "maxLength": 10000
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp of creation"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp of last update"
+        }
+      },
+      "required": ["userId", "title", "type", "status"]
+    },
+    "WorkspaceFile": {
+      "title": "WorkspaceFile",
+      "description": "Real-time editable local file tracked in the agent environment",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "File ID",
+          "pattern": "^[a-zA-Z0-9_-]+$",
+          "maxLength": 128
+        },
+        "userId": {
+          "type": "string",
+          "description": "Owner user UID",
+          "maxLength": 128
+        },
+        "path": {
+          "type": "string",
+          "description": "Path in workspace",
+          "maxLength": 256
+        },
+        "name": {
+          "type": "string",
+          "description": "File name",
+          "maxLength": 128
+        },
+        "language": {
+          "type": "string",
+          "description": "Syntax language",
+          "maxLength": 64
+        },
+        "content": {
+          "type": "string",
+          "description": "File content text",
+          "maxLength": 50000
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp of last edit"
+        }
+      },
+      "required": ["userId", "path", "name", "content"]
+    },
+    "GithubWorkflow": {
+      "title": "GithubWorkflow",
+      "description": "Automated code review or deployment workflow for GitHub",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Workflow run ID",
+          "pattern": "^[a-zA-Z0-9_-]+$",
+          "maxLength": 128
+        },
+        "userId": {
+          "type": "string",
+          "description": "Owner user UID",
+          "maxLength": 128
+        },
+        "repo": {
+          "type": "string",
+          "description": "Repository in format owner/repo",
+          "maxLength": 150
+        },
+        "workflowType": {
+          "type": "string",
+          "description": "code_review, test_and_build, deployment, security_audit",
+          "enum": ["code_review", "test_and_build", "deployment", "security_audit"]
+        },
+        "branch": {
+          "type": "string",
+          "description": "Branch name",
+          "maxLength": 100
+        },
+        "status": {
+          "type": "string",
+          "description": "Execution status",
+          "enum": ["queued", "in_progress", "passed", "failed", "deployed"]
+        },
+        "findings": {
+          "type": "string",
+          "description": "Review summary and AI diagnostic remarks",
+          "maxLength": 8000
+        },
+        "score": {
+          "type": "number",
+          "description": "Automated quality / security rating 0-100"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp of run"
+        }
+      },
+      "required": ["userId", "repo", "workflowType", "status"]
+    }
+  },
+  "firestore": {
+    "/tasks/{taskId}": {
+      "schema": {
+        "$ref": "#/entities/Task"
+      },
+      "description": "Collection of autonomous agent background tasks and processes"
+    },
+    "/files/{fileId}": {
+      "schema": {
+        "$ref": "#/entities/WorkspaceFile"
+      },
+      "description": "Collection of real-time editable local files in agent workspace"
+    },
+    "/githubWorkflows/{workflowId}": {
+      "schema": {
+        "$ref": "#/entities/GithubWorkflow"
+      },
+      "description": "Automated GitHub code reviews and deployment pipeline tasks"
+    }
+  }
+}

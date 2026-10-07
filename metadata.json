@@ -1,0 +1,6 @@
+{
+  "name": "agent0 - Autonomous Next-Gen AI Agent Platform",
+  "description": "The next-generation AI agent system featuring computer and browser use, seamless tool and Workspace integrations, real-time local file editing, GitHub automated code reviews and deployment workflows, and a background task monitor.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
